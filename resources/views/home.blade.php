@@ -7,60 +7,40 @@
                 <div class="card">
                     <div class="card-header">{{ __('Dashboard') }}</div>
 
-                    <div class="card-body">
+                    <div class="card-body" style="background: lightyellow;">
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">
                                 {{ session('status') }}
                             </div>
                         @endif
-
-                            <form method="POST" action="{{ route('loanRequest') }}">
-                                @csrf
-
-                                <div class="form-group row">
-                                    <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Loan Amount') }}</label>
-
-                                    <div class="col-md-6">
-                                        <input id="loan_amount" type="number" placeholder="Enter Amount" step="0.01" min="1" max="100000000" class="form-control @error('loan_amount') is-invalid @enderror" name="loan_amount" value="{{ old('loan_amount') }}" required autofocus>
-
-                                        @error('loan_amount')
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label for="loan_term" class="col-md-4 col-form-label text-md-right">{{ __('Loan Term') }}</label>
-
-                                    <div class="col-md-6">
-                                        <input id="loan_term" type="number" placeholder="Enter Months" step="1" min="1" max="12" class="form-control @error('loan_term') is-invalid @enderror" name="loan_term" required >
-
-                                        @error('loan_term')
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                        @enderror
-                                    </div>
-                                </div>
-
-
-
-                                <div class="form-group row mb-0">
-                                    <div class="col-md-8 offset-md-4">
-                                        <button type="submit" class="btn btn-primary">
-                                            {{ __('Login') }}
-                                        </button>
-
-                                        @if (Route::has('password.request'))
-                                            <a class="btn btn-link" href="{{ route('password.request') }}">
-                                                {{ __('Forgot Your Password?') }}
-                                            </a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </form>
+                            <div id="navbarSupportedContent">
+                                <!-- Left Side Of Navbar -->
+                                <ul class="nav nav-loans mb-3" id="loans-tab" role="tablist">
+                                    @if(Auth::user() && Auth::user()->is_admin==0)
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ Route::is('user_loans.create') ? 'active' : '' }}"
+                                               id="loan-create-tab" href="{{route('user_loans.create')}}" role="tab"
+                                               aria-selected="true">Request Loan</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link  {{ Route::is('user_loans.index') ? 'active' : '' }}"
+                                               id="loan-create-tab" href="{{route('user_loans.index')}}" role="tab"
+                                               aria-selected="false">My Loan Requests</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ Route::is('repayment.index') ? 'active' : '' }}"
+                                               id="repayment-create-tab" href="{{route('repayment.index')}}" role="tab"
+                                               aria-selected="false">My Repayment</a>
+                                        </li>
+                                    @endif
+                                    @if(Auth::user() && Auth::user()->is_admin==1)
+                                        <li class="nav-item {{ Route::is('user_loans.approve') ? 'active' : '' }}">
+                                            <a class="nav-link" id="loan-approve-tab" href="{{route('user_loans.approve')}}" role="tab"
+                                               aria-selected="false">Loan Requests Pending</a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
                     </div>
                 </div>
             </div>
