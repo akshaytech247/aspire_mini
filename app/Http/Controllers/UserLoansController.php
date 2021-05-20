@@ -6,6 +6,7 @@ use App\Models\UserLoans;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Type\Integer;
 
 class UserLoansController extends Controller
@@ -45,12 +46,11 @@ class UserLoansController extends Controller
             'amount' => 'required',
             'term' => 'required',
         ]);
-
         $user_loan = new UserLoans([
             'amount' => request('amount'),
             'repayment_amount' => intval(request('amount')) * (1 + (0.2 * intval(request('term')))),
             'term' => request('term'),
-            'user_id' => 1,
+            'user_id' => Auth::user()->id,
             'approved_by_user_id' => 0,
             'next_repayment_date' => Carbon::now()->addDay(7)
         ]);
